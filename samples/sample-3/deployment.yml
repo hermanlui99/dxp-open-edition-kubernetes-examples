@@ -1,0 +1,99 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azurefile
+provisioner: kubernetes.io/azure-file
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=1000
+  - gid=1000
+  - mfsymlinks
+  - nobrl
+  - cache=none
+parameters:
+  skuName: Standard_LRS
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: system:azure-cloud-provider
+rules:
+- apiGroups: ['']
+  resources: ['secrets']
+  verbs:     ['get','create']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:azure-cloud-provider
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: system:azure-cloud-provider
+subjects:
+- kind: ServiceAccount
+  name: persistent-volume-binder
+  namespace: kube-system
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: planet9-npm-pv-claim
+  labels:
+    app: planet9
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: azurefile
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planet9
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: planet9
+  template:
+    metadata:
+      labels:
+        app: planet9
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: planet9
+        image: neptunesoftware/planet9
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        ports:
+        - containerPort: 8080
+          name: planet9
+        volumeMounts:
+          - mountPath: "/home/planet9/customnpm"
+            name: planet9-npm-storage
+      volumes:
+      - name: planet9-npm-storage
+        persistentVolumeClaim:
+          claimName: planet9-npm-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: planet9
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: planet9
+  type: LoadBalancer
