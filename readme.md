@@ -1,5 +1,7 @@
 # Planet9 & Kubernetes
 
+If still any questions remain after reading this document, or linked documents, contact me via `ian@neptune-software.com` regarding any questions.
+
 ## Summary
 
 This repo contains different samples to showcase how you can deploy a Planet9 instance with Kuberenetes. 
