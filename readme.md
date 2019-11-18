@@ -162,11 +162,3 @@ kubectl create secret generic db-user-pass \
 * Custom NPM Modules are not persist.
 * `secrets` are used to secure sensitive credentials.
 * Planet 9 is available on port `8080` via the Public IP of the LoadBalancer. 
-
-# TODO
-
-* Upgrading Planet 9 version concerns? How to run the migration command? Because you need to spin up first an independent pod with the latest version to run "--upgrade"? Before doing a deployment?
-* Include NGINX example?
-  * We need to mount the certificates for HTTPS ? Right ? So, how do we provide the configuration file?
-  https://hub.docker.com/_/nginx
-  https://hub.docker.com/r/neptunesoftware/planet9
