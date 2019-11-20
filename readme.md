@@ -61,6 +61,10 @@ Planet 9 supports PostgreSQL for it's underlying database. More support for othe
 
 **Important**: *For more production-like environments, we suggested to use any other DB type aside from SQLite.*
 
+| Name | Default | Description |
+| ---  | ---     | ---         |
+| `DB_TYPE` | `sqlite` | One of the following values `sqlite`, `postgresql`. |
+
 ### Configure PostegreSQL
 
 You can configure your connection string with a single environment variable, using `DB_URI_POSTGRES` or you can configure each part of a connection with individual variables. 
