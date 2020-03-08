@@ -1,36 +1,7 @@
-# Planet9 & Kubernetes
-
-If still any questions remain after reading this document, or linked documents, contact me via `ian@neptune-software.com` regarding any questions.
-
-## Summary
-
-This repo contains different samples to showcase how you can deploy a Planet9 instance with Kuberenetes. 
-
-In addition to this documentation, we strongly suggest to read the ["Planet 9 installation guide"](https://www.neptune-software.com/download-your-trial/) first.
-
-## Docker Image
+# Planet 9 & Kubernetes
 
 The Planet 9 docker image is hosted on [Docker Hub](https://hub.docker.com/r/neptunesoftware/planet9).
 You can find the name and tags on Docker Hub.
-
-# Architecture
-
-Everything (aside of NPM Modules) in Planet 9 is persisted in the underlying database. Therefore you can use a `ReplicaSet` for deploying multiple Planet 9 pods, as long all Pods connect to the same database.
-
-![Load Balancer Graph With ReplicaSet](images/deployment_load_balancer.png)
-
-You have the liberty to hosts your database within Kubernetes. If you have limited skills available regarding databases, we advise to consider using cloud managed databases as hosting databases with High Availability and Disaster Recovery in mind is an expertise on its own.
-
-Planet 9 is a Node application that forks child processses to locally load balance within the Planet 9 instance. The amount of child processes can be configured (see configuration). The more processes you run, the more vCPU's you should consider to allocate to your pods.
-
-## NPM Modules
-
-A feature of Planet 9 is that you can use NPM modules for server scripts. The path to these NPM modules can be configured in the cockpit. When using Kubernetes, we prefer stateless apps. Theferefor we advice to persist the NPM modules in one of the following ways:
-
-* Create your own custom Planet 9 Docker Image, based on the Planet 9 Docker image and include the NPM modules that you use. Use your customized Docker Image for the Pods.
-![](images/deployment_npm_custom_image.png)
-* Use a shared persisted volume that you mount to the Planet 9 container. Make sure to use a shared storage type (e.g. AWS EFS, Azure Files). Mount the PersistentVolume/PersistentVolumeClaim to the path that is configured in the Planet 9 cockpit. This NPM Path setting is stored in the database. So all Planet 9 instances that use the same database will have the same NPM path setting.
-![](images/deployment_npm_shared_volume.png)
 
 # Examples
 
