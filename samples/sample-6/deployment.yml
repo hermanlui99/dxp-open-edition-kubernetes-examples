@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: planet9
+spec:
+  serviceName: planet9
+  replicas: 1
+  selector:
+    matchLabels:
+      app: planet9
+  template:
+    metadata:
+      labels:
+        app: planet9
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: azure-managed-disk
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+      containers:
+        - name: planet9
+          image: neptunesoftware/planet9:mssql
+          resources:
+            requests:
+              cpu: 100m
+              memory: 0.5Gi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          ports:
+            - containerPort: 8080
+              name: planet9
+          env:
+            - name: DB_TYPE
+              value: sqlite
+            - name: DB_SQLITE_PATH
+              value: /home/planet9/ext-disk/planet9.sqlite
+            - name: DB_SQLITE_ENTITIES_PATH
+              value: /home/planet9/ext-disk/planet9-entities.sqlite
+            - name: P9_MODULES_PATH
+              value: "/home/planet9/ext-disk"
+          volumeMounts:
+            - mountPath: "/home/planet9/ext-disk"
+              name: volume
+          securityContext:
+            allowPrivilegeEscalation: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: planet9
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: planet9
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: azure-managed-disk
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: default
+  resources:
+    requests:
+      storage: 30Gi
