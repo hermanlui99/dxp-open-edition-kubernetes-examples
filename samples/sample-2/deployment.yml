@@ -28,10 +28,12 @@ spec:
         - containerPort: 8080
           name: planet9
         env:
+        - name: DB_TYPE
+          value: "postgresql"
         - name: DB_PSQL_HOST
           value: "my.hosted.database.com"
         - name: DB_PSQL_PORT
-          value: 5432
+          value: "5432"
         - name: DB_PSQL_USER
           value: "MY_USER"
         - name: DB_PSQL_PASSWORD
