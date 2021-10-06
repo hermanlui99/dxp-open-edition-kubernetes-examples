@@ -1,10 +1,10 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: planet9
 spec:
   serviceName: planet9
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: planet9
@@ -13,20 +13,16 @@ spec:
       labels:
         app: planet9
     spec:
-      volumes:
-        - name: volume
-          persistentVolumeClaim:
-            claimName: azure-managed-disk
       containers:
         - name: planet9
           image: neptunesoftware/planet9:mssql
           resources:
-            requests:
-              cpu: 100m
-              memory: 0.5Gi
-            limits:
-              cpu: 1000m
-              memory: 1Gi
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
           ports:
             - containerPort: 8080
               name: planet9
@@ -44,12 +40,7 @@ spec:
             - name: DB_MSSQL_SCHEMA
               value: "planet9"
             - name: DB_MSSQL_DBNAME
-              value: "tenant-1"
-            - name: P9_MODULES_PATH
-              value: "/home/planet9/ext-disk"
-          volumeMounts:
-            - mountPath: "/home/planet9/ext-disk"
-              name: volume
+              value: "my-db-name"
 ---
 apiVersion: v1
 kind: Service
@@ -61,15 +52,3 @@ spec:
   selector:
     app: planet9
   type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: azure-managed-disk
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: default
-  resources:
-    requests:
-      storage: 30Gi

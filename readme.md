@@ -51,18 +51,18 @@ The most basic DXP Open Edition deployment fronted with a Load Balancer.
 * Database used is SQLite, and non persistent.
 * Custom NPM Modules are non persistent.
 * DXP Open Edition is available on port `8080` via the Public IP of the LoadBalancer. 
-    * You can find this IP address via with the `kubectl get svc` command.
+    * You can find this IP address with the `kubectl get svc` command.
 
 ### Example 2: Configure Database
 
 See `samples/sample-2/deployment.yml`
 
-A DXP Open Edition deployment with multiple pods, all using the same database fronted with a Load Balancer. Example shows how to configure environment variables.
+A DXP Open Edition deployment with multiple pods, all using the same database frontend with a Load Balancer. Example shows how to configure environment variables.
 
 **Example Characteristics**
 * 3x DXP Open Edition instances in one ReplicaSet.
 * Database used is PostgreSQL, and peristing.
-* Custom NPM Modules are not persist.
+* Custom NPM Modules are not persisted.
 * No `secrets` are used in this.
 * DXP Open Edition is available on port `8080` via the Public IP of the LoadBalancer. 
 
@@ -70,9 +70,9 @@ A DXP Open Edition deployment with multiple pods, all using the same database fr
 
 See `samples/sample-3/deployment.yml`
 
-A DXP Open Edition deployment with multiple pods, all using the same database fronted with a Load Balancer. Example shows how to configure the shared PersistentVolume for NPM modules.
+A DXP Open Edition deployment with multiple pods, all using the same database frontend with a Load Balancer. Example shows how to configure the shared PersistentVolume for NPM modules.
 
-his example is with AKS for the Kubernetes Cluster and uses Azure Files as PersistentVolume provider.
+This example is with AKS for the Kubernetes Cluster and uses Azure Files as PersistentVolume provider.
 
 Once the deployment is running, make sure to set the custom NPM path in the DXP Open Edition cockpit (Settings > Customizing > General > Custom NPM Installation Path). Based on the example `deployment.yml`file, the value should be `/home/planet9/customnpm` .
 
@@ -102,3 +102,17 @@ kubectl create secret generic db-user-pass \
 * Custom NPM Modules are not persist.
 * `secrets` are used to secure sensitive credentials.
 * DXP Open Edition is available on port `8080` via the Public IP of the LoadBalancer. 
+
+### Example 5: Using MSSQL/Azure SQL 
+
+See `samples/sample-5/deployment.yml`
+
+A DXP Open Edition deployment with multiple pods, all using the same database frontend with a Load Balancer. Example shows how to configure environment variables.
+
+**Example Characteristics**
+* 3x DXP Open Edition instances in one ReplicaSet.
+* Database used is MSSQL/Azure SQL, and peristing.
+* Custom NPM Modules are not persisted.
+* No `secrets` are used in this.
+* DXP Open Edition is available on port `8080` via the Public IP of the LoadBalancer. 
+
