@@ -34,7 +34,7 @@ DXP Open Edition allows you to use custom NPM modules. These NPM modules are ins
         * Slower
         * There is state in your deployment as there are persistent volumes to manage. You'll have to use Kubernetes Statefulset.
 
-## Examples
+## Kubernetes Examples
 
 Here are a few examples on deploy DXP Open Edition within kubernetes. Configuring security (e,g, RBAC, Policies, etc...) and hosting of databases is out of scope in this document.
 
