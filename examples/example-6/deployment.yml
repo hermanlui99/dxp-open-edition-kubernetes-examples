@@ -13,8 +13,6 @@ spec:
       labels:
         app: planet9
     spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
       volumes:
         - name: volume
           persistentVolumeClaim:

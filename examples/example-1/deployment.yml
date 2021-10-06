@@ -1,29 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: planet9-deploy-1
+  name: planet9
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: planet9-1
+      app: planet9
   template:
     metadata:
       labels:
-        app: planet9-1
+        app: planet9
     spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
       containers:
       - name: planet9
-        image: neptunesoftware/planet9:v2.0.4
+        image: neptunesoftware/planet9
         resources:
           requests:
             cpu: 1000m
             memory: 1Gi
           limits:
-            cpu: 2000m
-            memory: 2Gi
+            cpu: 1000m
+            memory: 1Gi
         ports:
         - containerPort: 8080
           name: planet9
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: planet9
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: planet9
+  type: LoadBalancer

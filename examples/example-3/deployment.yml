@@ -64,8 +64,6 @@ spec:
       labels:
         app: planet9
     spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
       containers:
       - name: planet9
         image: neptunesoftware/planet9
