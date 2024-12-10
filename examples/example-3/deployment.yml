@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
       - name: planet9
-        image: neptunesoftware/planet9
+        image: neptunesoftware/planet9:<version>
         resources:
           requests:
             cpu: 1000m
